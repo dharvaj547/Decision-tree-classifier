@@ -4,8 +4,6 @@
 #include <fstream>
 #include <cmath>
 
-using namespace std;
-
 #define MAX_OBSERVATIONS 500
 #define MAX_NUM_FEATURES 10
 
@@ -18,22 +16,21 @@ public:
 
     // Getters and setters
     void setNumFeatures(unsigned int);
-    unsigned int getNumFeatures();
+    unsigned int getNumFeatures() const;
     void getObservation(unsigned int, double *);
-    void setObservation(unsigned int, double *);
+    void setObservation(unsigned int, const double *);
     void setLabel(unsigned int, int);
     int getLabel(unsigned int);
-    unsigned int getNumObservations();
+    unsigned int getNumObservations() const;
     void setNumObservations(unsigned int);
 
     // Other methods
-    void print();
     void split(unsigned int, unsigned int, BinaryDataset *, BinaryDataset *);
     void splitLOO(unsigned int, BinaryDataset *, BinaryDataset *);
     void findOptimalSplit(unsigned int *, unsigned int *);
     double calcImpurityEntropy();
     int getMajorityLabel();
-    bool isEmpty();
+    bool isEmpty() const;
     void appendObservation(double *, int);
     void zero();
 

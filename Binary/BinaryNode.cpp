@@ -10,7 +10,6 @@ BinaryNode::BinaryNode() {
 }
 
 bool BinaryNode::isLeaf() {
-    // if nodeY and nodeN are nullptr, return true
     if (getNodeY() == nullptr && getNodeN() == nullptr) {
         return true;
     }
@@ -18,7 +17,6 @@ bool BinaryNode::isLeaf() {
     return false;
 }
 
-// Getters and setters
 BinaryNode *BinaryNode::getNodeY() {
     return nodeY;
 }
@@ -39,7 +37,7 @@ void BinaryNode::setDecisionDim(unsigned int dim_in) {
     decisionDim = dim_in;
 }
 
-unsigned int BinaryNode::getDecisionDim() {
+unsigned int BinaryNode::getDecisionDim() const {
     return decisionDim;
 }
 
@@ -47,7 +45,7 @@ void BinaryNode::setDecisionCriterion(double criterion_in) {
     decisionCriterion = criterion_in;
 }
 
-double BinaryNode::getDecisionCriterion() {
+double BinaryNode::getDecisionCriterion() const {
     return decisionCriterion;
 }
 
@@ -67,7 +65,7 @@ void BinaryNode::setLabel(int label_in) {
     label = label_in;
 }
 
-int BinaryNode::getLabel() {
+int BinaryNode::getLabel() const {
     return label;
 }
 
@@ -82,9 +80,10 @@ void BinaryNode::setImpurity(double impurity_in) {
     impurity = impurity_in;
 }
 
-double BinaryNode::getImpurity() {
+double BinaryNode::getImpurity() const {
     return impurity;
 }
 
 BinaryNode::~BinaryNode() {
+
 }

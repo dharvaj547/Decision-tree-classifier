@@ -12,13 +12,13 @@ public:
     void setNodeY(BinaryNode *);
     void setNodeN(BinaryNode *);
     void setDecisionDim(unsigned int);
-    unsigned int getDecisionDim();
+    unsigned int getDecisionDim() const;
     void setDecisionCriterion(double);
-    double getDecisionCriterion();
+    double getDecisionCriterion() const;
     void setLabel(int);
-    int getLabel();
+    int getLabel() const;
     void setImpurity(double);
-    double getImpurity();
+    double getImpurity() const;
 
     // Other methods
     bool isLeaf();

@@ -16,16 +16,15 @@ BinaryNode *BinaryDecisionTree::getRoot() {
     return root;
 }
 
-int BinaryDecisionTree::classify(double *ft_in) {
+int BinaryDecisionTree::classify(const double *ft_in) {
     BinaryNode *node = root;
 
-    // loop until leaf node is reached
     while (!node->isLeaf()) {
-        // check wether to traverse to "yes" node
+        // check whether to traverse to "yes" node
         if (ft_in[node->getDecisionDim()] < node->getDecisionCriterion()) {
             node = node->getNodeY();
         }
-            // traverse to the "no" node
+        // traverse to the "no" node
         else {
             node = node->getNodeN();
         }
@@ -36,20 +35,18 @@ int BinaryDecisionTree::classify(double *ft_in) {
 
 void BinaryDecisionTree::growTree(BinaryDataset *dataset_in, BinaryNode *node_in) {
     unsigned int out_dim, out_ii;
-    double *feature = new double[dataset_in->getNumFeatures()];
-    BinaryDataset *subset1 = new BinaryDataset();
-    BinaryDataset *subset2 = new BinaryDataset();
+    auto *feature = new double[dataset_in->getNumFeatures()];
 
-    // set impurity and label
+    auto *subset1 = new BinaryDataset();
+    auto *subset2 = new BinaryDataset();
+
     node_in->setImpurity(dataset_in->calcImpurityEntropy());
     node_in->setLabel(dataset_in->getMajorityLabel());
 
     // if dataset is not pure
     if (node_in->getImpurity() > 0.0) {
-        // find optimal split
         dataset_in->findOptimalSplit(&out_dim, &out_ii);
 
-        // set decision dimension and decision criterion
         dataset_in->getObservation(out_ii, feature);
         node_in->setDecisionDim(out_dim);
         node_in->setDecisionCriterion(feature[out_dim]);
@@ -57,8 +54,8 @@ void BinaryDecisionTree::growTree(BinaryDataset *dataset_in, BinaryNode *node_in
         dataset_in->split(out_dim, out_ii, subset1, subset2);
 
         // create child nodes
-        BinaryNode *child1 = new BinaryNode();
-        BinaryNode *child2 = new BinaryNode();
+        auto *child1 = new BinaryNode();
+        auto *child2 = new BinaryNode();
         node_in->setNodeY(child1);
         node_in->setNodeN(child2);
 

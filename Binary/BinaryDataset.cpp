@@ -9,14 +9,11 @@ BinaryDataset::BinaryDataset(const char *filename_in, unsigned int num_features)
     unsigned int r = 0;
     numFeatures = num_features;
 
-    // open file
-    ifstream dataset(filename_in);
+    std::ifstream dataset(filename_in);
+    if (!dataset.is_open()) {
+        std::cout << "Error opening file" << std::endl;
+    }
 
-    // check for errors opening file
-    if (!dataset.is_open())
-        cout << "Error opening file" << endl;
-
-    // read file line by line
     while (!dataset.eof()) {
         for (unsigned int c = 0; c < num_features; c++) {
             // input data into observation
@@ -33,7 +30,7 @@ BinaryDataset::BinaryDataset(const char *filename_in, unsigned int num_features)
     dataset.close();
 }
 
-bool BinaryDataset::isEmpty() {
+bool BinaryDataset::isEmpty() const {
     return numObservations == 0;
 }
 
@@ -46,7 +43,7 @@ int BinaryDataset::getMajorityLabel() {
         if (getLabel(i) == -1) {
             neg++;
         }
-            // count number of labels which are positive
+        // count number of labels which are positive
         else if (getLabel(i) == 1) {
             pos++;
         }
@@ -70,7 +67,7 @@ double BinaryDataset::calcImpurityEntropy() {
         if (getLabel(i) == -1) {
             n1++;
         }
-            // positive labels are class 2
+        // positive labels are class 2
         else if (getLabel(i) == 1) {
             n2++;
         }
@@ -90,9 +87,6 @@ double BinaryDataset::calcImpurityEntropy() {
     return result;
 }
 
-void BinaryDataset::print() {
-}
-
 void BinaryDataset::split(unsigned int iidim, unsigned int iiobs, BinaryDataset *subset1, BinaryDataset *subset2) {
     double features[numFeatures];
 
@@ -100,11 +94,9 @@ void BinaryDataset::split(unsigned int iidim, unsigned int iiobs, BinaryDataset 
     subset1->zero();
     subset2->zero();
 
-    // set number of features for both subsets
     subset1->setNumFeatures(numFeatures);
     subset2->setNumFeatures(numFeatures);
 
-    // loop over number of observations
     for (unsigned int i = 0; i < numObservations; i++) {
         getObservation(i, features);
 
@@ -112,7 +104,7 @@ void BinaryDataset::split(unsigned int iidim, unsigned int iiobs, BinaryDataset 
         if (observation[i][iidim] < observation[iiobs][iidim]) {
             subset1->appendObservation(features, getLabel(i));
         }
-            // otherwise append to subset2
+        // otherwise append to subset2
         else {
             subset2->appendObservation(features, getLabel(i));
         }
@@ -120,11 +112,9 @@ void BinaryDataset::split(unsigned int iidim, unsigned int iiobs, BinaryDataset 
 }
 
 void BinaryDataset::appendObservation(double *ft_in, int label_in) {
-    // append observation at next available position
     setObservation(numObservations, ft_in);
     setLabel(numObservations, label_in);
 
-    // update number of observations
     numObservations++;
 }
 
@@ -146,7 +136,7 @@ void BinaryDataset::splitLOO(unsigned int ii, BinaryDataset *dataset1, BinaryDat
         if (i == ii) {
             dataset2->appendObservation(features, getLabel(i));
         }
-            // add all other observations to dataset1
+        // add all other observations to dataset1
         else {
             dataset1->appendObservation(features, getLabel(i));
         }
@@ -156,12 +146,11 @@ void BinaryDataset::splitLOO(unsigned int ii, BinaryDataset *dataset1, BinaryDat
 void BinaryDataset::findOptimalSplit(unsigned int *out_dim, unsigned int *out_ii) {
     unsigned int optimal_dim = 0, optimal_ixobs = 0;
     double current_drop = 0.0, max_drop = 0.0;
-    BinaryDataset *subset1 = new BinaryDataset();
-    BinaryDataset *subset2 = new BinaryDataset();
 
-    // loop over feature dimensions
+    auto *subset1 = new BinaryDataset();
+    auto *subset2 = new BinaryDataset();
+
     for (unsigned int i = 0; i < numFeatures; i++) {
-        // loop over all observations
         for (unsigned int j = 0; j < numObservations; j++) {
             // split dataset along these dimensions
             split(i, j, subset1, subset2);
@@ -172,7 +161,7 @@ void BinaryDataset::findOptimalSplit(unsigned int *out_dim, unsigned int *out_ii
             double n = getNumObservations();
             double n1 = subset1->getNumObservations();
 
-            // calculate impurity drop for this split
+            // calculate impurity drop
             current_drop = IeD - (n1 / n) * IeD1 - (1.0 - n1 / n) * IeD2;
 
             // get max impurity drop
@@ -197,14 +186,12 @@ void BinaryDataset::getObservation(unsigned int ix, double *features) {
         return;
     }
 
-    // add observation at given row index
     for (unsigned int i = 0; i < numFeatures; i++) {
         features[i] = observation[ix][i];
     }
 }
 
-void BinaryDataset::setObservation(unsigned int ix, double *features) {
-    // set observation at given row (ix)
+void BinaryDataset::setObservation(unsigned int ix, const double *features) {
     for (unsigned int i = 0; i < numFeatures; i++) {
         observation[ix][i] = features[i];
     }
@@ -234,11 +221,11 @@ void BinaryDataset::setNumFeatures(unsigned int num_features_in) {
     numFeatures = num_features_in;
 }
 
-unsigned int BinaryDataset::getNumFeatures() {
+unsigned int BinaryDataset::getNumFeatures() const {
     return numFeatures;
 }
 
-unsigned int BinaryDataset::getNumObservations() {
+unsigned int BinaryDataset::getNumObservations() const {
     return numObservations;
 }
 

@@ -7,7 +7,7 @@ class BinaryDecisionTree {
 public:
     // Constructors and destructors
     BinaryDecisionTree();
-    BinaryDecisionTree(BinaryDataset *);
+    explicit BinaryDecisionTree(BinaryDataset *);
     virtual ~BinaryDecisionTree();
 
     // Getters and setters
@@ -16,7 +16,7 @@ public:
 
     // Other methods
     bool isEmpty();
-    int classify(double *);
+    int classify(const double *);
     unsigned int size();
 
 private:

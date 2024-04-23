@@ -5,7 +5,7 @@
 
 #define nullptr 0
 
-// flags to enable tests for the later parts of the assignment
+// flags to enable tests
 #define ENABLE_TASK_TESTS
 #define ENABLE_NODE_TESTS
 #define ENABLE_DATASET_TESTS
