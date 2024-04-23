@@ -13,13 +13,19 @@
 
 // include headers for classes being tested
 #ifdef ENABLE_NODE_TESTS
+
 #include "Binary/BinaryNode.hpp"
+
 #endif
 #ifdef ENABLE_DATASET_TESTS
+
 #include "Binary/BinaryDataset.hpp"
+
 #endif
 #ifdef ENABLE_DECISIONTREE_TESTS
+
 #include "Binary/BinaryDecisionTree.hpp"
+
 #endif
 
 using namespace std;
@@ -31,7 +37,9 @@ const double SIGMA = 0.001;
 The outcome of each test case is described by this enum, which should make the result more obvious
 than if a boolean value was used in its place.
 */
-enum TestResult { TR_PASS, TR_FAIL };
+enum TestResult {
+    TR_PASS, TR_FAIL
+};
 
 /*
 Helper macro to eliminate a lot of of code repetition. Macros aren't the best, but this is an easy
@@ -70,50 +78,52 @@ close to the expected value.
 }
 
 #ifdef ENABLE_TASK_TESTS
-  TestResult BaseTest() {
+
+TestResult BaseTest() {
     // if this fails then there is a problem
     // should pass to makesure nullptr = NULL = 0
     ASSERT_EQUALS(nullptr, 0);
 
     return TR_PASS;
-  }
-  
+}
+
 #endif /*ENABLE_TASK_TESTS*/
 #ifdef ENABLE_NODE_TESTS
-  TestResult NodeGetAndSet(){
+
+TestResult NodeGetAndSet() {
 
     BinaryNode *BaseNode = new BinaryNode();
     BinaryNode *Y_Node = new BinaryNode();
     BinaryNode *N_Node = new BinaryNode();
 
-    ASSERT_EQUALS(BaseNode->getNodeN(),nullptr);
-    ASSERT_EQUALS(BaseNode->getNodeY(),nullptr);
+    ASSERT_EQUALS(BaseNode->getNodeN(), nullptr);
+    ASSERT_EQUALS(BaseNode->getNodeY(), nullptr);
     BaseNode->setNodeN(N_Node);
     BaseNode->setNodeY(Y_Node);
-    ASSERT_EQUALS(BaseNode->getNodeN(),N_Node);
-    ASSERT_EQUALS(BaseNode->getNodeY(),Y_Node);
+    ASSERT_EQUALS(BaseNode->getNodeN(), N_Node);
+    ASSERT_EQUALS(BaseNode->getNodeY(), Y_Node);
 
     BaseNode->setDecisionCriterion(0.5);
-    ASSERT_EQUALS(BaseNode->getDecisionCriterion(),0.5);
+    ASSERT_EQUALS(BaseNode->getDecisionCriterion(), 0.5);
 
     BaseNode->setDecisionDim(3);
-    ASSERT_EQUALS(BaseNode->getDecisionDim(),3);
+    ASSERT_EQUALS(BaseNode->getDecisionDim(), 3);
 
     BaseNode->setImpurity(0.7);
-    ASSERT_EQUALS(BaseNode->getImpurity(),0.7);
+    ASSERT_EQUALS(BaseNode->getImpurity(), 0.7);
 
     BaseNode->setLabel(-1);
-    ASSERT_EQUALS(BaseNode->getLabel(),-1);
+    ASSERT_EQUALS(BaseNode->getLabel(), -1);
     BaseNode->setLabel(1);
-    ASSERT_EQUALS(BaseNode->getLabel(),1);
+    ASSERT_EQUALS(BaseNode->getLabel(), 1);
 
     delete BaseNode;
 
     return TR_PASS;
 
-  }
+}
 
-  TestResult NodeIsLeafBasic(){
+TestResult NodeIsLeafBasic() {
 
     BinaryNode *BaseNode = new BinaryNode();
     BinaryNode *Y_Node = new BinaryNode();
@@ -179,23 +189,23 @@ close to the expected value.
     delete childNode10;
 
     return TR_PASS;
-  }
+}
 
 #endif /*ENABLE_NODE_TESTS*/
 #ifdef ENABLE_DATASET_TESTS
 
-  TestResult DatasetGetAndSet() {
+TestResult DatasetGetAndSet() {
 
     BinaryDataset *Dataset = new BinaryDataset();
 
-    ASSERT_EQUALS(Dataset->getNumFeatures(),0);
-    ASSERT_EQUALS(Dataset->getNumObservations(),0);
+    ASSERT_EQUALS(Dataset->getNumFeatures(), 0);
+    ASSERT_EQUALS(Dataset->getNumObservations(), 0);
 
     Dataset->setNumFeatures(100000);
     Dataset->setNumObservations(200000);
 
-    ASSERT_EQUALS(Dataset->getNumFeatures(),100000);
-    ASSERT_EQUALS(Dataset->getNumObservations(),200000);
+    ASSERT_EQUALS(Dataset->getNumFeatures(), 100000);
+    ASSERT_EQUALS(Dataset->getNumObservations(), 200000);
 
     delete Dataset;
 
@@ -217,53 +227,53 @@ close to the expected value.
     delete dataset2;
 
     return TR_PASS;
-  }
-  
-  TestResult DatasetSplitLOO(){
+}
+
+TestResult DatasetSplitLOO() {
 
     BinaryDataset *dataset = new BinaryDataset("Datasets/dataset_in6.txt", 2);
     BinaryDataset *dataset_holdin = new BinaryDataset();
     BinaryDataset *dataset_holdout = new BinaryDataset();
 
-    ASSERT_EQUALS(dataset->getNumObservations(),20);
-    ASSERT_EQUALS(dataset->getNumFeatures(),2);
+    ASSERT_EQUALS(dataset->getNumObservations(), 20);
+    ASSERT_EQUALS(dataset->getNumFeatures(), 2);
 
     dataset->splitLOO(3, dataset_holdin, dataset_holdout);
-    ASSERT_EQUALS(dataset_holdin->getNumObservations(),19);
-    ASSERT_EQUALS(dataset_holdin->getNumFeatures(),2);
-    ASSERT_EQUALS(dataset_holdout->getNumObservations(),1);
-    ASSERT_EQUALS(dataset_holdout->getNumFeatures(),2);
+    ASSERT_EQUALS(dataset_holdin->getNumObservations(), 19);
+    ASSERT_EQUALS(dataset_holdin->getNumFeatures(), 2);
+    ASSERT_EQUALS(dataset_holdout->getNumObservations(), 1);
+    ASSERT_EQUALS(dataset_holdout->getNumFeatures(), 2);
 
     delete dataset;
     delete dataset_holdin;
     delete dataset_holdout;
 
     return TR_PASS;
-  }
+}
 
-  TestResult DatasetSplit(){
+TestResult DatasetSplit() {
 
     BinaryDataset *dataset = new BinaryDataset("Datasets/dataset_in6.txt", 2);
     BinaryDataset *dataset_holdin = new BinaryDataset();
     BinaryDataset *dataset_holdout = new BinaryDataset();
 
-    ASSERT_EQUALS(dataset->getNumObservations(),20);
-    ASSERT_EQUALS(dataset->getNumFeatures(),2);
+    ASSERT_EQUALS(dataset->getNumObservations(), 20);
+    ASSERT_EQUALS(dataset->getNumFeatures(), 2);
 
-    dataset->split(0,0, dataset_holdin, dataset_holdout);
-    ASSERT_EQUALS(dataset_holdin->getNumObservations(),17);
-    ASSERT_EQUALS(dataset_holdin->getNumFeatures(),2);
-    ASSERT_EQUALS(dataset_holdout->getNumObservations(),3);
-    ASSERT_EQUALS(dataset_holdout->getNumFeatures(),2);
+    dataset->split(0, 0, dataset_holdin, dataset_holdout);
+    ASSERT_EQUALS(dataset_holdin->getNumObservations(), 17);
+    ASSERT_EQUALS(dataset_holdin->getNumFeatures(), 2);
+    ASSERT_EQUALS(dataset_holdout->getNumObservations(), 3);
+    ASSERT_EQUALS(dataset_holdout->getNumFeatures(), 2);
 
     delete dataset;
     delete dataset_holdin;
     delete dataset_holdout;
 
     return TR_PASS;
-  }
+}
 
-  TestResult DatasetOptimalSplit(){
+TestResult DatasetOptimalSplit() {
 
     BinaryDataset *dataset = new BinaryDataset("Datasets/dataset_in6.txt", 2);
     BinaryDataset *dataset_holdin = new BinaryDataset();
@@ -271,9 +281,9 @@ close to the expected value.
     unsigned int dim, ix;
     unsigned int *out_dim = &dim;
     unsigned int *out_ix = &ix;
-    dataset->findOptimalSplit(out_dim,out_ix);
-    ASSERT_EQUALS(dim,0);
-    ASSERT_EQUALS(ix,0);
+    dataset->findOptimalSplit(out_dim, out_ix);
+    ASSERT_EQUALS(dim, 0);
+    ASSERT_EQUALS(ix, 0);
 
     delete dataset;
     delete dataset_holdin;
@@ -282,9 +292,9 @@ close to the expected value.
     BinaryDataset *dataset1 = new BinaryDataset("Datasets/dataset_in4.txt", 3);
     BinaryDataset *dataset1_holdin = new BinaryDataset();
     BinaryDataset *dataset1_holdout = new BinaryDataset();
-    dataset1->findOptimalSplit(out_dim,out_ix);
-    ASSERT_EQUALS(dim,2);
-    ASSERT_EQUALS(ix,12);
+    dataset1->findOptimalSplit(out_dim, out_ix);
+    ASSERT_EQUALS(dim, 2);
+    ASSERT_EQUALS(ix, 12);
 
     delete dataset1;
     delete dataset1_holdin;
@@ -294,25 +304,25 @@ close to the expected value.
     BinaryDataset *dataset2_holdin = new BinaryDataset();
     BinaryDataset *dataset2_holdout = new BinaryDataset();
 
-    dataset2->findOptimalSplit(out_dim,out_ix);
-    ASSERT_EQUALS(ix,2);
-    ASSERT_EQUALS(dim,1);
+    dataset2->findOptimalSplit(out_dim, out_ix);
+    ASSERT_EQUALS(ix, 2);
+    ASSERT_EQUALS(dim, 1);
 
     delete dataset2;
     delete dataset2_holdin;
     delete dataset2_holdout;
 
     return TR_PASS;
-  }
-
+}
 
 
 #endif /*ENABLE_DATASET_TESTS*/
 #ifdef ENABLE_DECISIONTREE_TESTS
-  TestResult DecisionTreeGrow(){
+
+TestResult DecisionTreeGrow() {
 
     BinaryDataset *dataset = new BinaryDataset("Datasets/dataset_in6.txt", 2);
-    BinaryDecisionTree* Tree = new BinaryDecisionTree(dataset);
+    BinaryDecisionTree *Tree = new BinaryDecisionTree(dataset);
 
     Tree->print();
     cout << Tree->size() << endl;
@@ -327,42 +337,42 @@ close to the expected value.
     delete dataset;
     delete Tree;
     return TR_PASS;
-  }
+}
 
-  // TestResult DecisionTreeClassify(){
+// TestResult DecisionTreeClassify(){
 
-  //   BinaryDataset *dataset = new BinaryDataset("Datasets/dataset_in6.txt", 2);
-  //   BinaryDecisionTree* Tree = new BinaryDecisionTree(dataset);
-  //   double obs1 = 0.678;
-  //   double obs2 = 0;
-  //   double *obsptr;
+//   BinaryDataset *dataset = new BinaryDataset("Datasets/dataset_in6.txt", 2);
+//   BinaryDecisionTree* Tree = new BinaryDecisionTree(dataset);
+//   double obs1 = 0.678;
+//   double obs2 = 0;
+//   double *obsptr;
 
-  //   obsptr = &obs1;
-  //   ASSERT_EQUALS(Tree->classify(obsptr),1);
-  //   obsptr = &obs2;
-  //   ASSERT_EQUALS(Tree->classify(obsptr),-1);
+//   obsptr = &obs1;
+//   ASSERT_EQUALS(Tree->classify(obsptr),1);
+//   obsptr = &obs2;
+//   ASSERT_EQUALS(Tree->classify(obsptr),-1);
 
-  //   delete dataset;
-  //   delete Tree;
+//   delete dataset;
+//   delete Tree;
 
-  //   return TR_PASS;
-  // }
+//   return TR_PASS;
+// }
 
-  TestResult DecisionTreeClassify(){
+TestResult DecisionTreeClassify() {
 
     BinaryDataset *dataset = new BinaryDataset("Datasets/dataset_in6.txt", 2);
-    BinaryDecisionTree* Tree = new BinaryDecisionTree(dataset);
-    double obs1[] = {0.515,0.912};
-    double obs2[] = {0.257,0.427};
+    BinaryDecisionTree *Tree = new BinaryDecisionTree(dataset);
+    double obs1[] = {0.515, 0.912};
+    double obs2[] = {0.257, 0.427};
 
-    ASSERT_EQUALS(Tree->classify(obs1),1);
-    ASSERT_EQUALS(Tree->classify(obs2),-1);
+    ASSERT_EQUALS(Tree->classify(obs1), 1);
+    ASSERT_EQUALS(Tree->classify(obs2), -1);
 
     delete dataset;
     delete Tree;
 
     return TR_PASS;
-  }
+}
 
 #endif /*ENABLE_DECISIONTREE_TESTS*/
 
@@ -376,79 +386,79 @@ This function collects up all the tests as a vector of function pointers. If you
 tests and want to be able to run them, make sure you add them to the `tests` vector here.
 */
 vector<TestResult (*)()> generateTests() {
-  vector<TestResult (*)()> tests;
-  #ifdef ENABLE_TASK_TESTS
+    vector<TestResult (*)()> tests;
+#ifdef ENABLE_TASK_TESTS
     tests.push_back(&BaseTest);
-  #endif /*ENABLE_TASK_TESTS*/
-  #ifdef ENABLE_NODE_TESTS
-  tests.push_back(&NodeGetAndSet);
-  tests.push_back(&NodeIsLeafBasic);
-  #endif /*ENABLE_NODE_TESTS*/
-  #ifdef ENABLE_DATASET_TESTS
+#endif /*ENABLE_TASK_TESTS*/
+#ifdef ENABLE_NODE_TESTS
+    tests.push_back(&NodeGetAndSet);
+    tests.push_back(&NodeIsLeafBasic);
+#endif /*ENABLE_NODE_TESTS*/
+#ifdef ENABLE_DATASET_TESTS
     tests.push_back(&DatasetGetAndSet);
     tests.push_back(&DatasetSplitLOO);
     tests.push_back(&DatasetSplit);
     tests.push_back(&DatasetOptimalSplit);
-  #endif /*ENABLE_DATASET_TESTS*/
-  #ifdef ENABLE_DECISIONTREE_TESTS
+#endif /*ENABLE_DATASET_TESTS*/
+#ifdef ENABLE_DECISIONTREE_TESTS
     tests.push_back(&DecisionTreeGrow);
     tests.push_back(&DecisionTreeClassify);
-  #endif /*ENABLE_DECISIONTREE_TESTS*/
-  // tests.push_back(&customTest);
+#endif /*ENABLE_DECISIONTREE_TESTS*/
+    // tests.push_back(&customTest);
 
-  return tests;
+    return tests;
 }
 
-int main(int argc, char const* argv[]) {
-  // If one or more test numbers are passed as command-line parameters, execute them
-  vector<TestResult (*)()> tests_to_run = generateTests();
-  unsigned int pass_count = 0;
-  unsigned int fail_count = 0;
-  unsigned int run_count = 0;
-  if (argc > 1) {
-    for (int i = 1; i < argc; ++i) {
-      unsigned int test_num = atoi(argv[i]);
-      if (test_num > tests_to_run.size()) {
-        cout << "ERROR: unknown test case " << test_num << endl;
-        continue;
-      }
-      // run the test
-      ++run_count;
-      TestResult result = tests_to_run[test_num]();
-      if (result == TR_FAIL) {
-        cout << "FAIL: Test " << test_num << " failed." << endl;
-        ++fail_count;
-        return 99;
-      } else {
-        cout << "PASS: Test " << test_num << " passed." << endl;
-        ++pass_count;
-        return 0;
-      }
+int main(int argc, char const *argv[]) {
+    // If one or more test numbers are passed as command-line parameters, execute them
+    vector<TestResult (*)()> tests_to_run = generateTests();
+    unsigned int pass_count = 0;
+    unsigned int fail_count = 0;
+    unsigned int run_count = 0;
+    if (argc > 1) {
+        for (int i = 1; i < argc; ++i) {
+            unsigned int test_num = atoi(argv[i]);
+            if (test_num > tests_to_run.size()) {
+                cout << "ERROR: unknown test case " << test_num << endl;
+                continue;
+            }
+            // run the test
+            ++run_count;
+            TestResult result = tests_to_run[test_num]();
+            if (result == TR_FAIL) {
+                cout << "FAIL: Test " << test_num << " failed." << endl;
+                ++fail_count;
+                return 99;
+            } else {
+                cout << "PASS: Test " << test_num << " passed." << endl;
+                ++pass_count;
+                return 0;
+            }
+        }
+    } else {
+        // otherwise, run all tests
+        // Make sure to update this section as you add more tests
+        // Add the tests for the first task
+        for (unsigned int t = 0; t < tests_to_run.size(); ++t) {
+            ++run_count;
+            TestResult result = tests_to_run[t]();
+            if (result == TR_FAIL) {
+                cout << "FAIL: Test " << t << " failed." << endl;
+                ++fail_count;
+            } else {
+                cout << "PASS: Test " << t << " passed." << endl;
+                ++pass_count;
+            }
+        }
     }
-  } else {
-    // otherwise, run all tests
-    // Make sure to update this section as you add more tests
-    // Add the tests for the first task
-    for (unsigned int t = 0; t < tests_to_run.size(); ++t) {
-      ++run_count;
-      TestResult result = tests_to_run[t]();
-      if (result == TR_FAIL) {
-        cout << "FAIL: Test " << t << " failed." << endl;
-        ++fail_count;
-      } else {
-        cout << "PASS: Test " << t << " passed." << endl;
-        ++pass_count;
-      }
-    }
-  }
-  cout << "\n-------------------------------------------------\n"
-  << "Total Run: " << run_count << "\n"
-  << "Total PASSED: " << pass_count << "\n"
-  << "Total FAILED: " << fail_count << "\n"
-  << "-------------------------------------------------\n" << endl;
+    cout << "\n-------------------------------------------------\n"
+         << "Total Run: " << run_count << "\n"
+         << "Total PASSED: " << pass_count << "\n"
+         << "Total FAILED: " << fail_count << "\n"
+         << "-------------------------------------------------\n" << endl;
 
-  if(pass_count == tests_to_run.size()) std::cout << "UwU Senpai" << endl;
+    if (pass_count == tests_to_run.size()) std::cout << "UwU Senpai" << endl;
 
-  // Return 0 if everything was ok
-  return 0;
+    // Return 0 if everything was ok
+    return 0;
 }
