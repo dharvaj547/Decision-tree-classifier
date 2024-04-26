@@ -1,42 +1,16 @@
 #include "BinaryDecisionTree.hpp"
 
 BinaryDecisionTree::BinaryDecisionTree() {
-    root = nullptr;
+    _root = nullptr;
 }
 
 BinaryDecisionTree::BinaryDecisionTree(BinaryDataset *dataset) {
-    growTree(dataset, root);
-}
-
-bool BinaryDecisionTree::isEmpty() {
-    return root == nullptr;
-}
-
-BinaryNode *BinaryDecisionTree::getRoot() {
-    return root;
-}
-
-int BinaryDecisionTree::classify(const double *ft_in) {
-    BinaryNode *node = root;
-
-    while (!node->isLeaf()) {
-        // check whether to traverse to "yes" node
-        if (ft_in[node->getDecisionDim()] < node->getDecisionCriterion()) {
-            node = node->getNodeY();
-        }
-        // traverse to the "no" node
-        else {
-            node = node->getNodeN();
-        }
-    }
-
-    return node->getLabel();
+    growTree(dataset, _root);
 }
 
 void BinaryDecisionTree::growTree(BinaryDataset *dataset_in, BinaryNode *node_in) {
-    unsigned int out_dim, out_ii;
+    int out_dim, out_ii;
     auto *feature = new double[dataset_in->getNumFeatures()];
-
     auto *subset1 = new BinaryDataset();
     auto *subset2 = new BinaryDataset();
 
@@ -70,23 +44,18 @@ void BinaryDecisionTree::growTree(BinaryDataset *dataset_in, BinaryNode *node_in
 }
 
 void BinaryDecisionTree::deleteSubtree(BinaryNode *node_in) {
-    // check for end nodes
+    // no subtree to delete
     if (node_in == nullptr) {
         return;
     }
 
-    // delete child nodes
     deleteSubtree(node_in->getNodeY());
     deleteSubtree(node_in->getNodeN());
 
     delete node_in;
 }
 
-unsigned int BinaryDecisionTree::size() {
-    return leafCount(getRoot());
-}
-
-unsigned int BinaryDecisionTree::leafCount(BinaryNode *node_in) {
+int BinaryDecisionTree::leafCount(BinaryNode *node_in) {
     // initial check
     if (node_in == nullptr) {
         return 0;
@@ -102,10 +71,40 @@ unsigned int BinaryDecisionTree::leafCount(BinaryNode *node_in) {
     }
 }
 
+bool BinaryDecisionTree::isEmpty() {
+    return _root == nullptr;
+}
+
+int BinaryDecisionTree::classify(const double *ft_in) {
+    BinaryNode *node = _root;
+
+    while (!node->isLeaf()) {
+        if (ft_in[node->getDecisionDim()] < node->getDecisionCriterion()) {
+            node = node->getNodeY();
+        }
+        else {
+            node = node->getNodeN();
+        }
+    }
+
+    return node->getLabel();
+}
+
+int BinaryDecisionTree::size() {
+    return leafCount(getRoot());
+}
+
+
+/*-------------------- GETTERS AND SETTERS ------------------- */
+
+BinaryNode *BinaryDecisionTree::getRoot() {
+    return _root;
+}
+
 void BinaryDecisionTree::setRoot(BinaryNode *node_in) {
-    root = node_in;
+    _root = node_in;
 }
 
 BinaryDecisionTree::~BinaryDecisionTree() {
-    deleteSubtree(root);
+    deleteSubtree(_root);
 }

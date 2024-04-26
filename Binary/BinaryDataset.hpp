@@ -8,35 +8,33 @@
 #define MAX_NUM_FEATURES 10
 
 class BinaryDataset {
+private:
+    int _numFeatures;
+    double _observation[MAX_OBSERVATIONS][MAX_NUM_FEATURES];
+    int _label[MAX_OBSERVATIONS];
+    int _numObservations;
+
 public:
-    // Constructors and deconstructors
     BinaryDataset();
-    BinaryDataset(const char *, unsigned int);
+    BinaryDataset(const char *, int);
     virtual ~BinaryDataset();
 
-    // Getters and setters
-    void setNumFeatures(unsigned int);
-    unsigned int getNumFeatures() const;
-    void getObservation(unsigned int, double *);
-    void setObservation(unsigned int, const double *);
-    void setLabel(unsigned int, int);
-    int getLabel(unsigned int);
-    unsigned int getNumObservations() const;
-    void setNumObservations(unsigned int);
-
-    // Other methods
-    void split(unsigned int, unsigned int, BinaryDataset *, BinaryDataset *);
-    void splitLOO(unsigned int, BinaryDataset *, BinaryDataset *);
-    void findOptimalSplit(unsigned int *, unsigned int *);
+    void split(int, int, BinaryDataset *, BinaryDataset *);
+    void splitLOO(int, BinaryDataset *, BinaryDataset *);
+    void findOptimalSplit(int *, int *);
     double calcImpurityEntropy();
     int getMajorityLabel();
     bool isEmpty() const;
     void appendObservation(double *, int);
     void zero();
 
-private:
-    unsigned int numFeatures;
-    double observation[MAX_OBSERVATIONS][MAX_NUM_FEATURES];
-    int label[MAX_OBSERVATIONS];
-    unsigned int numObservations;
+    // Getters and setters
+    int getNumFeatures() const;
+    void setNumFeatures(int);
+    void getObservation(int, double *);
+    void setObservation(int, const double *);
+    int getLabel(int);
+    void setLabel(int, int);
+    int getNumObservations() const;
+    void setNumObservations(int);
 };

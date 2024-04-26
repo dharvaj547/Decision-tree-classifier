@@ -4,24 +4,23 @@
 #include "BinaryDataset.hpp"
 
 class BinaryDecisionTree {
+private:
+    BinaryNode *_root = new BinaryNode();
+
+    void growTree(BinaryDataset *, BinaryNode *);
+    void deleteSubtree(BinaryNode *);
+    int leafCount(BinaryNode *);
+
 public:
-    // Constructors and destructors
     BinaryDecisionTree();
     explicit BinaryDecisionTree(BinaryDataset *);
     virtual ~BinaryDecisionTree();
 
+    bool isEmpty();
+    int classify(const double *);
+    int size();
+
     // Getters and setters
     BinaryNode *getRoot();
     void setRoot(BinaryNode *);
-
-    // Other methods
-    bool isEmpty();
-    int classify(const double *);
-    unsigned int size();
-
-private:
-    void growTree(BinaryDataset *, BinaryNode *);
-    void deleteSubtree(BinaryNode *);
-    unsigned int leafCount(BinaryNode *);
-    BinaryNode *root = new BinaryNode();
 };

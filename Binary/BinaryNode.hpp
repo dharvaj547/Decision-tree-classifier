@@ -1,33 +1,31 @@
 #pragma once
 
 class BinaryNode {
+private:
+    BinaryNode *_nodeY;
+    BinaryNode *_nodeN;
+    int _decisionDim;
+    double _decisionCriterion;
+    int _label;
+    double _impurity;
+
 public:
-    // Constructors and destructors
     BinaryNode();
     virtual ~BinaryNode();
 
-    // Setters and getters
-    BinaryNode *getNodeY();
-    BinaryNode *getNodeN();
-    void setNodeY(BinaryNode *);
-    void setNodeN(BinaryNode *);
-    void setDecisionDim(unsigned int);
-    unsigned int getDecisionDim() const;
-    void setDecisionCriterion(double);
-    double getDecisionCriterion() const;
-    void setLabel(int);
-    int getLabel() const;
-    void setImpurity(double);
-    double getImpurity() const;
-
-    // Other methods
     bool isLeaf();
 
-private:
-    BinaryNode *nodeY;
-    BinaryNode *nodeN;
-    unsigned int decisionDim;
-    double decisionCriterion;
-    int label;
-    double impurity;
+    // Setters and getters
+    BinaryNode *getNodeY();
+    void setNodeY(BinaryNode *);
+    BinaryNode *getNodeN();
+    void setNodeN(BinaryNode *);
+    int getDecisionDim() const;
+    void setDecisionDim(int);
+    double getDecisionCriterion() const;
+    void setDecisionCriterion(double);
+    int getLabel() const;
+    void setLabel(int);
+    double getImpurity() const;
+    void setImpurity(double);
 };
