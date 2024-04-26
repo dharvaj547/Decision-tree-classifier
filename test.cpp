@@ -376,14 +376,8 @@ TestResult DecisionTreeClassify() {
 
 #endif /*ENABLE_DECISIONTREE_TESTS*/
 
-// TestResult customTest(){
-
-//   return TR_PASS;
-// }
-
 /*
-This function collects up all the tests as a vector of function pointers. If you create your own
-tests and want to be able to run them, make sure you add them to the `tests` vector here.
+This function collects up all the tests as a vector of function pointers.
 */
 vector<TestResult (*)()> generateTests() {
     vector<TestResult (*)()> tests;
@@ -404,14 +398,13 @@ vector<TestResult (*)()> generateTests() {
     tests.push_back(&DecisionTreeGrow);
     tests.push_back(&DecisionTreeClassify);
 #endif /*ENABLE_DECISIONTREE_TESTS*/
-    // tests.push_back(&customTest);
 
     return tests;
 }
 
 int main(int argc, char const *argv[]) {
-    // If one or more test numbers are passed as command-line parameters, execute them
     vector<TestResult (*)()> tests_to_run = generateTests();
+
     unsigned int pass_count = 0;
     unsigned int fail_count = 0;
     unsigned int run_count = 0;
@@ -422,9 +415,11 @@ int main(int argc, char const *argv[]) {
                 cout << "ERROR: unknown test case " << test_num << endl;
                 continue;
             }
+
             // run the test
             ++run_count;
             TestResult result = tests_to_run[test_num]();
+
             if (result == TR_FAIL) {
                 cout << "FAIL: Test " << test_num << " failed." << endl;
                 ++fail_count;
@@ -442,6 +437,7 @@ int main(int argc, char const *argv[]) {
         for (unsigned int t = 0; t < tests_to_run.size(); ++t) {
             ++run_count;
             TestResult result = tests_to_run[t]();
+
             if (result == TR_FAIL) {
                 cout << "FAIL: Test " << t << " failed." << endl;
                 ++fail_count;
